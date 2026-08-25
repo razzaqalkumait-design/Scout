@@ -782,7 +782,8 @@ function mergeFetched(fetched){
       cl: fp.cl || prev?.cl || 0,
       wc: fp.wc || prev?.wc || 0,
       bd: fp.bd || prev?.bd || 0,
-      retired: fp.retired, young: fp.young
+      retired: fp.retired, young: fp.young,
+      with: Array.isArray(fp.with) ? fp.with : (prev && prev.with) || []
     });
   }
   PLAYERS = [...byName.values()];
@@ -1023,6 +1024,27 @@ function dynamicQuestions(){
       ev: (function(club){ return function(pl){ return (pl.clubs || []).includes(club); }; })(club)
     });
   });
+  const mateCount = {};
+  for (const p of cands){
+    const seen = {};
+    for (const name of (p.with || [])){
+      if (!name || seen[name]) continue;
+      seen[name] = 1;
+      mateCount[name] = (mateCount[name] || 0) + 1;
+    }
+  }
+  for (const name in mateCount){
+    const yes = mateCount[name];
+    if (yes === 0 || yes === n) continue;
+    const id = "mate_" + name;
+    if (state.asked.includes(id)) continue;
+    qs.push({
+      id,
+      text: "Has he played alongside " + name + "?",
+      textAr: "هل لعب إلى جانب " + name + "؟",
+      ev: (function(name){ return function(pl){ return (pl.with || []).includes(name); }; })(name)
+    });
+  }
   return qs;
 }
 
