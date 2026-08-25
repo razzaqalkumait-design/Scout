@@ -51,12 +51,13 @@
     display:flex; align-items:center; gap:18px; margin-bottom:26px;
   }
   .dial{
-    position:relative; width:78px; height:78px; flex-shrink:0;
+    position:relative; width:120px; height:120px; flex-shrink:0;
   }
-  .dial svg{transform:rotate(-90deg);}
+  .dial svg{transform:rotate(-90deg); width:120px; height:120px;}
   .dial-num{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
-    font-size:22px; font-weight:800; font-family:'Courier New', monospace; color:var(--amber);
+    font-size:18px; font-weight:800; font-family:'Courier New', monospace; color:var(--amber);
+    letter-spacing:-0.5px;
   }
   .dial-meta{flex:1;}
   .dial-meta .label{font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--chalk-dim); font-family:'Courier New', monospace;}
@@ -258,6 +259,31 @@
     border-color:var(--red); color:var(--red);
   }
 
+  .qtext[dir="rtl"]{
+    font-family:'Segoe UI','Tahoma','Noto Naskh Arabic',system-ui,sans-serif;
+    line-height:1.55;
+  }
+  .lang-row{
+    width:100%; padding:14px 16px 16px;
+    border:1px solid var(--line); border-radius:2px;
+    background:rgba(255,255,255,0.03);
+  }
+  .lang-toggle{
+    display:grid; grid-template-columns:1fr 1fr; gap:8px;
+  }
+  .lang-toggle button{
+    width:100%;
+    padding:10px 8px !important;
+    font-size:13px !important;
+    letter-spacing:1px !important;
+  }
+  .lang-toggle button.on{
+    color:var(--amber) !important;
+    border-color:var(--amber-dim) !important;
+    background:rgba(255,182,39,0.12) !important;
+  }
+
+
   /* ---------- motion ---------- */
   .masthead{
     animation: fadeDown 0.5s ease both;
@@ -369,7 +395,7 @@
     to{transform:none; opacity:1;}
   }
   @keyframes ringDraw{
-    from{stroke-dashoffset:201;}
+    from{stroke-dashoffset:314;}
   }
   @keyframes scanLine{
     from{transform:scaleX(0);}
@@ -432,7 +458,6 @@
     </div>
   </div>
 </div>
-
 <script>
 /* ---------------- BACKGROUND MUSIC ---------------- */
 let bgmVol = parseFloat(localStorage.getItem("scout-bgm-vol"));
@@ -510,15 +535,57 @@ const BIG5 = {
   "Bordeaux":"Ligue 1","Guingamp":"Ligue 1","Le Mans":"Ligue 1","Metz":"Ligue 1","Brest":"Ligue 1","Boulogne":"Ligue 1","Caen":"Ligue 1"
 };
 const CONF = {
-  "Argentina":"South America","Brazil":"South America","Uruguay":"South America",
+  "Argentina":"South America","Brazil":"South America","Uruguay":"South America","Chile":"South America",
+  "Colombia":"South America","Paraguay":"South America","Peru":"South America","Ecuador":"South America",
+  "Bolivia":"South America","Venezuela":"South America",
   "Portugal":"Europe","Belgium":"Europe","Croatia":"Europe","England":"Europe","Poland":"Europe","France":"Europe",
-  "Netherlands":"Europe","Germany":"Europe","Spain":"Europe","Italy":"Europe","Wales":"Europe","Sweden":"Europe","Georgia":"Europe",
-  "Egypt":"Africa","Ivory Coast":"Africa","Nigeria":"Africa","Senegal":"Africa",
-  "South Korea":"Asia",
+  "Netherlands":"Europe","Germany":"Europe","Spain":"Europe","Italy":"Europe","Wales":"Europe","Sweden":"Europe",
+  "Georgia":"Europe","United Kingdom":"Europe","United Kingdom of Great Britain and Ireland":"Europe",
+  "Scotland":"Europe","Northern Ireland":"Europe","Ireland":"Europe","Republic of Ireland":"Europe",
+  "Kingdom of Italy":"Europe","Kingdom of the Netherlands":"Europe","West Germany":"Europe","East Germany":"Europe",
+  "German Democratic Republic":"Europe","Federal Republic of Germany":"Europe","Soviet Union":"Europe",
+  "Russia":"Europe","Ukraine":"Europe","Romania":"Europe","Hungary":"Europe","Czech Republic":"Europe","Czechia":"Europe",
+  "Czechoslovakia":"Europe","Austria":"Europe","Switzerland":"Europe","Denmark":"Europe","Norway":"Europe",
+  "Finland":"Europe","Greece":"Europe","Turkey":"Europe","Serbia":"Europe","Yugoslavia":"Europe",
+  "Bosnia and Herzegovina":"Europe","Slovenia":"Europe","Slovakia":"Europe","Bulgaria":"Europe","Albania":"Europe",
+  "North Macedonia":"Europe","Montenegro":"Europe","Kosovo":"Europe","Iceland":"Europe","Estonia":"Europe",
+  "Latvia":"Europe","Lithuania":"Europe","Belarus":"Europe","Moldova":"Europe","Cyprus":"Europe","Malta":"Europe",
+  "Luxembourg":"Europe","Faroe Islands":"Europe","Armenia":"Europe","Azerbaijan":"Europe",
+  "Federal Republic of Yugoslavia":"Europe","Serbia and Montenegro":"Europe",
+  "Egypt":"Africa","Ivory Coast":"Africa","Côte d'Ivoire":"Africa","Nigeria":"Africa","Senegal":"Africa",
+  "Algeria":"Africa","Morocco":"Africa","Tunisia":"Africa","Cameroon":"Africa","Ghana":"Africa",
+  "South Africa":"Africa","Mali":"Africa","Guinea":"Africa","Burkina Faso":"Africa",
+  "Democratic Republic of the Congo":"Africa","Congo":"Africa","Zambia":"Africa","Zimbabwe":"Africa",
+  "Kenya":"Africa","Angola":"Africa","Togo":"Africa","Cape Verde":"Africa","Gambia":"Africa",
+  "Liberia":"Africa","Sudan":"Africa","Libya":"Africa","Ethiopia":"Africa","Tanzania":"Africa",
+  "Mozambique":"Africa","Gabon":"Africa","Benin":"Africa","Sierra Leone":"Africa","Namibia":"Africa",
+  "South Korea":"Asia","Japan":"Asia","China":"Asia","People's Republic of China":"Asia",
+  "North Korea":"Asia","Thailand":"Asia","Vietnam":"Asia","Indonesia":"Asia","Malaysia":"Asia",
+  "India":"Asia","Uzbekistan":"Asia","Australia":"Asia","New Zealand":"Oceania",
+  "United States":"North America","Mexico":"North America","Canada":"North America",
+  "Costa Rica":"North America","Honduras":"North America","Jamaica":"North America",
+  "Panama":"North America","El Salvador":"North America","Guatemala":"North America",
+  "Trinidad and Tobago":"North America","Haiti":"North America",
   "Iraq":"Middle East","Saudi Arabia":"Middle East","United Arab Emirates":"Middle East",
   "Qatar":"Middle East","Iran":"Middle East","Jordan":"Middle East","Syria":"Middle East",
   "Kuwait":"Middle East","Bahrain":"Middle East","Oman":"Middle East","Palestine":"Middle East",
-  "Lebanon":"Middle East","Yemen":"Middle East"
+  "Lebanon":"Middle East","Yemen":"Middle East","State of Palestine":"Middle East"
+};
+const NAT_AR = {
+  "Iraq":"العراق","Saudi Arabia":"السعودية","Iran":"إيران","Qatar":"قطر",
+  "United Arab Emirates":"الإمارات","Kuwait":"الكويت","Syria":"سوريا","Jordan":"الأردن",
+  "Bahrain":"البحرين","Oman":"عُمان","Palestine":"فلسطين","Lebanon":"لبنان","Yemen":"اليمن",
+  "Egypt":"مصر","Algeria":"الجزائر","Morocco":"المغرب","Tunisia":"تونس","Libya":"ليبيا","Sudan":"السودان",
+  "Brazil":"البرازيل","Argentina":"الأرجنتين","Uruguay":"الأوروغواي","Chile":"تشيلي","Colombia":"كولومبيا",
+  "Paraguay":"باراغواي","Peru":"بيرو","Ecuador":"الإكوادور","Mexico":"المكسيك",
+  "France":"فرنسا","Spain":"إسبانيا","Italy":"إيطاليا","Germany":"ألمانيا","England":"إنجلترا",
+  "United Kingdom":"المملكة المتحدة","Scotland":"إسكتلندا","Wales":"ويلز","Ireland":"أيرلندا",
+  "Portugal":"البرتغال","Netherlands":"هولندا","Belgium":"بلجيكا","Croatia":"كرواتيا",
+  "Poland":"بولندا","Sweden":"السويد","Norway":"النرويج","Denmark":"الدنمارك","Greece":"اليونان",
+  "Turkey":"تركيا","Russia":"روسيا","Switzerland":"سويسرا","Austria":"النمسا","Serbia":"صربيا",
+  "South Korea":"كوريا الجنوبية","Japan":"اليابان","China":"الصين","Australia":"أستراليا",
+  "United States":"الولايات المتحدة","Nigeria":"نيجيريا","Senegal":"السنغال","Ivory Coast":"ساحل العاج",
+  "Cameroon":"الكاميرون","Ghana":"غانا","South Africa":"جنوب أفريقيا"
 };
 // PLAYERS starts as the built-in seed dataset (works standalone, e.g. opened
 // as a local file). If players.json is reachable alongside this page (same
@@ -617,37 +684,83 @@ const CLUB_FETCH = {
 };
 
 /* -------------- QUESTION DEFINITIONS -------------- */
-function leaguesOf(pl){ return [...new Set(pl.clubs.map(c=>BIG5[c]).filter(Boolean))]; }
-function confOf(pl){ return CONF[pl.nat] || "Other"; }
+function leaguesOf(pl){ return [...new Set((pl.clubs||[]).map(c=>BIG5[c]).filter(Boolean))]; }
+function confOf(pl){
+  const nat = (pl && pl.nat) || "";
+  if (CONF[nat]) return CONF[nat];
+  const n = nat.toLowerCase();
+  if (!n) return "Other";
+  if (/(iraq|iran|saudi|qatar|kuwait|bahrain|oman|jordan|syria|lebanon|yemen|palestine|emirate)/.test(n)) return "Middle East";
+  if (/(brazil|argentin|uruguay|chile|colombia|paraguay|peru|ecuador|bolivia|venezuela)/.test(n)) return "South America";
+  if (/(egypt|nigeri|senegal|algeria|morocco|tunisia|cameroon|ghana|mali|ivory|côte|cote d'|africa|kenya|angola|sudan|libya)/.test(n)) return "Africa";
+  if (/(korea|japan|china|thailand|vietnam|indonesia|malaysia|india|uzbekistan|australia)/.test(n)) return "Asia";
+  if (/(united states|mexico|canada|jamaica|honduras|costa rica|panama)/.test(n)) return "North America";
+  if (/(britain|england|scotland|wales|ireland|italy|italia|germany|deutsch|france|spain|netherland|holland|portugal|sweden|norway|denmark|russia|soviet|yugoslav|greece|turkey|poland|czech|hungar|romania|ukraine|belgium|croatia|serbia|swiss|austria|finland|iceland)/.test(n)) return "Europe";
+  return "Other";
+}
+function isNationalTeamClub(c){
+  if (!c) return true;
+  if (CONF[c]) return true;
+  return /national|world cup|olympic|under-|u-\d|youth|men's|women/i.test(c);
+}
+function realClubs(pl){
+  return (pl.clubs || []).filter(c => !isNationalTeamClub(c));
+}
+function escHtml(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(ch){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+  });
+}
 
 const QUESTIONS = [
-  {id:"pos_fw", text:"Is he a forward / attacker?", ev:pl=>pl.p==="FW"},
-  {id:"pos_mf", text:"Is he a midfielder?", ev:pl=>pl.p==="MF"},
-  {id:"pos_df", text:"Is he a defender?", ev:pl=>pl.p==="DF"},
-  {id:"pos_gk", text:"Is he a goalkeeper?", ev:pl=>pl.p==="GK"},
-  {id:"lg_pl", text:"Has he played in the Premier League?", ev:pl=>leaguesOf(pl).includes("Premier League")},
-  {id:"lg_ll", text:"Has he played in La Liga?", ev:pl=>leaguesOf(pl).includes("La Liga")},
-  {id:"lg_sa", text:"Has he played in Serie A?", ev:pl=>leaguesOf(pl).includes("Serie A")},
-  {id:"lg_bl", text:"Has he played in the Bundesliga?", ev:pl=>leaguesOf(pl).includes("Bundesliga")},
-  {id:"lg_l1", text:"Has he played in Ligue 1?", ev:pl=>leaguesOf(pl).includes("Ligue 1")},
-  {id:"club_rm", text:"Has he ever played for Real Madrid?", ev:pl=>pl.clubs.includes("Real Madrid")},
-  {id:"club_fcb", text:"Has he ever played for Barcelona?", ev:pl=>pl.clubs.includes("Barcelona")},
-  {id:"club_mu", text:"Has he ever played for Manchester United?", ev:pl=>pl.clubs.includes("Manchester United")},
-  {id:"club_mc", text:"Has he ever played for Manchester City?", ev:pl=>pl.clubs.includes("Manchester City")},
-  {id:"club_bay", text:"Has he ever played for Bayern Munich?", ev:pl=>pl.clubs.includes("Bayern Munich")},
-  {id:"club_psg", text:"Has he ever played for PSG?", ev:pl=>pl.clubs.includes("PSG")},
-  {id:"club_liv", text:"Has he ever played for Liverpool?", ev:pl=>pl.clubs.includes("Liverpool")},
-  {id:"club_che", text:"Has he ever played for Chelsea?", ev:pl=>pl.clubs.includes("Chelsea")},
-  {id:"cl", text:"Has he won the UEFA Champions League?", ev:pl=>!!pl.cl},
-  {id:"wc", text:"Has he won the FIFA World Cup?", ev:pl=>!!pl.wc},
-  {id:"bd", text:"Has he won the Ballon d'Or?", ev:pl=>!!pl.bd},
-  {id:"nclubs", text:"Has he played for 3 or more major clubs?", ev:pl=>pl.clubs.length>=3},
-  {id:"conf_sa", text:"Is he from South America?", ev:pl=>confOf(pl)==="South America"},
-  {id:"conf_eu", text:"Is he from Europe?", ev:pl=>confOf(pl)==="Europe"},
-  {id:"conf_af", text:"Is he from Africa?", ev:pl=>confOf(pl)==="Africa"},
-  {id:"retired", text:"Has he already retired from professional football?", ev:pl=>!!pl.retired},
-  {id:"young", text:"Is he currently under 25 years old?", ev:pl=>!!pl.young},
+  {id:"pos_fw", text:"Is he a forward / attacker?", textAr:"هل هو مهاجم؟", ev:pl=>pl.p==="FW"},
+  {id:"pos_mf", text:"Is he a midfielder?", textAr:"هل هو لاعب وسط؟", ev:pl=>pl.p==="MF"},
+  {id:"pos_df", text:"Is he a defender?", textAr:"هل هو مدافع؟", ev:pl=>pl.p==="DF"},
+  {id:"pos_gk", text:"Is he a goalkeeper?", textAr:"هل هو حارس مرمى؟", ev:pl=>pl.p==="GK"},
+  {id:"lg_pl", text:"Has he played in the Premier League?", textAr:"هل لعب في الدوري الإنجليزي الممتاز؟", ev:pl=>leaguesOf(pl).includes("Premier League")},
+  {id:"lg_ll", text:"Has he played in La Liga?", textAr:"هل لعب في الليغا؟", ev:pl=>leaguesOf(pl).includes("La Liga")},
+  {id:"lg_sa", text:"Has he played in Serie A?", textAr:"هل لعب في سيري آ؟", ev:pl=>leaguesOf(pl).includes("Serie A")},
+  {id:"lg_bl", text:"Has he played in the Bundesliga?", textAr:"هل لعب في البوندسليغا؟", ev:pl=>leaguesOf(pl).includes("Bundesliga")},
+  {id:"lg_l1", text:"Has he played in Ligue 1?", textAr:"هل لعب في الدوري الفرنسي؟", ev:pl=>leaguesOf(pl).includes("Ligue 1")},
+  {id:"club_rm", text:"Has he ever played for Real Madrid?", textAr:"هل سبق له اللعب مع ريال مدريد؟", ev:pl=>pl.clubs.includes("Real Madrid")},
+  {id:"club_fcb", text:"Has he ever played for Barcelona?", textAr:"هل سبق له اللعب مع برشلونة؟", ev:pl=>pl.clubs.includes("Barcelona")},
+  {id:"club_mu", text:"Has he ever played for Manchester United?", textAr:"هل سبق له اللعب مع مانشستر يونايتد؟", ev:pl=>pl.clubs.includes("Manchester United")},
+  {id:"club_mc", text:"Has he ever played for Manchester City?", textAr:"هل سبق له اللعب مع مانشستر سيتي؟", ev:pl=>pl.clubs.includes("Manchester City")},
+  {id:"club_bay", text:"Has he ever played for Bayern Munich?", textAr:"هل سبق له اللعب مع بايرن ميونخ؟", ev:pl=>pl.clubs.includes("Bayern Munich")},
+  {id:"club_psg", text:"Has he ever played for PSG?", textAr:"هل سبق له اللعب مع باريس سان جيرمان؟", ev:pl=>pl.clubs.includes("PSG")},
+  {id:"club_liv", text:"Has he ever played for Liverpool?", textAr:"هل سبق له اللعب مع ليفربول؟", ev:pl=>pl.clubs.includes("Liverpool")},
+  {id:"club_che", text:"Has he ever played for Chelsea?", textAr:"هل سبق له اللعب مع تشيلسي؟", ev:pl=>pl.clubs.includes("Chelsea")},
+  {id:"cl", text:"Has he won the UEFA Champions League?", textAr:"هل فاز بدوري أبطال أوروبا؟", ev:pl=>!!pl.cl},
+  {id:"wc", text:"Has he won the FIFA World Cup?", textAr:"هل فاز بكأس العالم؟", ev:pl=>!!pl.wc},
+  {id:"bd", text:"Has he won the Ballon d'Or?", textAr:"هل فاز بالكرة الذهبية؟", ev:pl=>!!pl.bd},
+  {id:"nclubs", text:"Has he played for 3 or more clubs?", textAr:"هل لعب مع ثلاثة أندية أو أكثر؟", ev:pl=>realClubs(pl).length>=3},
+  {id:"conf_sa", text:"Is he from South America?", textAr:"هل هو من أمريكا الجنوبية؟", ev:pl=>confOf(pl)==="South America"},
+  {id:"conf_eu", text:"Is he from Europe?", textAr:"هل هو من أوروبا؟", ev:pl=>confOf(pl)==="Europe"},
+  {id:"conf_af", text:"Is he from Africa?", textAr:"هل هو من أفريقيا؟", ev:pl=>confOf(pl)==="Africa"},
+  {id:"conf_me", text:"Is he from the Middle East?", textAr:"هل هو من الشرق الأوسط؟", ev:pl=>confOf(pl)==="Middle East"},
+  {id:"conf_as", text:"Is he from Asia?", textAr:"هل هو من آسيا؟", ev:pl=>confOf(pl)==="Asia"},
+  {id:"club_ars", text:"Has he ever played for Arsenal?", textAr:"هل سبق له اللعب مع أرسنال؟", ev:pl=>pl.clubs.includes("Arsenal")},
+  {id:"club_juv", text:"Has he ever played for Juventus?", textAr:"هل سبق له اللعب مع يوفنتوس؟", ev:pl=>pl.clubs.includes("Juventus")},
+  {id:"club_mil", text:"Has he ever played for AC Milan?", textAr:"هل سبق له اللعب مع ميلان؟", ev:pl=>pl.clubs.includes("AC Milan")},
+  {id:"club_int", text:"Has he ever played for Inter Milan?", textAr:"هل سبق له اللعب مع إنتر ميلان؟", ev:pl=>pl.clubs.includes("Inter Milan")},
+  {id:"club_ajax", text:"Has he ever played for Ajax?", textAr:"هل سبق له اللعب مع أياكس؟", ev:pl=>pl.clubs.includes("Ajax")},
+  {id:"club_nss", text:"Has he ever played for Al-Nassr?", textAr:"هل سبق له اللعب مع النصر؟", ev:pl=>pl.clubs.includes("Al-Nassr")},
+  {id:"club_itt", text:"Has he ever played for Al-Ittihad?", textAr:"هل سبق له اللعب مع الاتحاد؟", ev:pl=>pl.clubs.includes("Al-Ittihad")},
+  {id:"retired", text:"Has he already retired from professional football?", textAr:"هل اعتزل كرة القدم الاحترافية؟", ev:pl=>!!pl.retired},
+  {id:"young", text:"Is he currently under 25 years old?", textAr:"هل عمره حالياً أقل من 25 سنة؟", ev:pl=>!!pl.young},
 ];
+
+let uiLang = localStorage.getItem("scout-lang") === "ar" ? "ar" : "en";
+function setLang(l){
+  uiLang = l === "ar" ? "ar" : "en";
+  localStorage.setItem("scout-lang", uiLang);
+  renderMenu();
+  render();
+}
+function qText(q){
+  if(!q) return uiLang === "ar" ? "جاري التضييق…" : "Hmm, narrowing down...";
+  return uiLang === "ar" ? (q.textAr || q.text) : q.text;
+}
 
 /* -------------- LOAD PLAYERS FROM SCOUT API -------------- */
 let playersSource = "built-in";
@@ -821,6 +934,13 @@ function renderMenu(){
       <div class="vol-head"><span>Music</span><span id="volLabel">${vol}%</span></div>
       <input id="volSlider" type="range" min="0" max="100" value="${vol}" oninput="setVolume(this.value)">
     </div>
+    <div class="lang-row">
+      <div class="vol-head"><span>Language</span><span>${uiLang === "ar" ? "العربية" : "English"}</span></div>
+      <div class="lang-toggle">
+        <button type="button" class="${uiLang === "en" ? "on" : ""}" onclick="setLang('en')">English</button>
+        <button type="button" class="${uiLang === "ar" ? "on" : ""}" onclick="setLang('ar')">العربية</button>
+      </div>
+    </div>
     ${inGame ? `<button type="button" class="quit" onclick="askQuit(event)">Quit</button>` : ""}
   `;
 }
@@ -860,17 +980,63 @@ window.addEventListener('popstate', function(){
   render();
 });
 
+function dynamicQuestions(){
+  const cands = state.candidates;
+  const n = cands.length;
+  if (!n) return [];
+  const natCount = {};
+  const clubCount = {};
+  for (const p of cands){
+    const nat = p.nat || "";
+    if (nat) natCount[nat] = (natCount[nat] || 0) + 1;
+    const seen = {};
+    for (const c of realClubs(p)){
+      if (seen[c]) continue;
+      seen[c] = 1;
+      clubCount[c] = (clubCount[c] || 0) + 1;
+    }
+  }
+  const qs = [];
+  for (const nat in natCount){
+    const yes = natCount[nat];
+    if (yes === 0 || yes === n) continue;
+    const id = "nat_" + nat;
+    if (state.asked.includes(id)) continue;
+    qs.push({
+      id,
+      text: "Is he from " + nat + "?",
+      textAr: "هل هو من " + (NAT_AR[nat] || nat) + "؟",
+      ev: (function(nat){ return function(pl){ return pl.nat === nat; }; })(nat)
+    });
+  }
+  const clubs = Object.keys(clubCount).map(function(c){
+    const yes = clubCount[c];
+    return {c: c, score: Math.min(yes, n - yes)};
+  }).filter(function(x){ return x.score > 0 && !state.asked.includes("dclub_" + x.c); });
+  clubs.sort(function(a,b){ return b.score - a.score; });
+  clubs.slice(0, 40).forEach(function(x){
+    const club = x.c;
+    qs.push({
+      id: "dclub_" + club,
+      text: "Has he ever played for " + club + "?",
+      textAr: "هل سبق له اللعب مع " + club + "؟",
+      ev: (function(club){ return function(pl){ return (pl.clubs || []).includes(club); }; })(club)
+    });
+  });
+  return qs;
+}
+
 function pickNextQuestion(){
-  const remaining = QUESTIONS.filter(q=>!state.asked.includes(q.id));
+  const remaining = QUESTIONS.filter(q => !state.asked.includes(q.id)).concat(dynamicQuestions());
   let best=null, bestScore=-1;
   for(const q of remaining){
-    const yes = state.candidates.filter(p=>q.ev(p)).length;
+    const yes = state.candidates.filter(p => q.ev(p)).length;
     const no = state.candidates.length - yes;
-    if(yes===0 || no===0) continue; // no discriminating value
-    const score = Math.min(yes,no); // maximize balance
+    if(yes===0 || no===0) continue;
+    const score = Math.min(yes,no);
     if(score>bestScore){bestScore=score; best=q;}
   }
-  state.currentQ = best; // may be null if exhausted
+  state.currentQ = best;
 }
 
 function replayFilters(){
@@ -903,29 +1069,24 @@ async function answer(val){
   if(val!==null){
     state.candidates = state.candidates.filter(p => q.ev(p) === !!val);
   }
-  if(val === 1 && q && CLUB_FETCH[q.id]){
-    await expandClub(CLUB_FETCH[q.id]);
-  }
   proceed();
 }
 
 function proceed(){
-  if(state.candidates.length<=1 || state.asked.length>=18 || !QUESTIONS.some(q=>!state.asked.includes(q.id))){
+  if(state.candidates.length<=1){
     makeGuess();
     return;
   }
   pickNextQuestion();
-  if(!state.currentQ){ makeGuess(); return; }
-  render();
+  if(state.currentQ){
+    render();
+    return;
+  }
+  makeGuess();
 }
 
 function makeGuess(){
   const pool = state.candidates.filter(p=>!state.guessed.includes(p.n));
-  pool.sort(function(a, b){
-    const as = SEED_NAMES.has(a.n) ? 1 : 0;
-    const bs = SEED_NAMES.has(b.n) ? 1 : 0;
-    return bs - as;
-  });
   state.currentGuess = pool[0] || null;
   state.screen = "guessing";
   render();
@@ -950,13 +1111,15 @@ function confirmGuess(correct){
 
 /* -------------- RENDER -------------- */
 function dial(pct){
-  const r=32, c=2*Math.PI*r;
+  const r=50, c=2*Math.PI*r;
   const offset = c*(1-pct);
-  return `<div class="dial"><svg width="78" height="78">
-    <circle cx="39" cy="39" r="${r}" stroke="#1f5940" stroke-width="6" fill="none"/>
-    <circle cx="39" cy="39" r="${r}" stroke="#ffb627" stroke-width="6" fill="none"
+  const n = String(state.candidates.length);
+  const fs = n.length >= 5 ? 16 : n.length === 4 ? 20 : 24;
+  return `<div class="dial"><svg viewBox="0 0 120 120" width="120" height="120">
+    <circle cx="60" cy="60" r="${r}" stroke="#1f5940" stroke-width="7" fill="none"/>
+    <circle cx="60" cy="60" r="${r}" stroke="#ffb627" stroke-width="7" fill="none"
       stroke-dasharray="${c}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
-  </svg><div class="dial-num">${state.candidates.length}</div></div>`;
+  </svg><div class="dial-num" style="font-size:${fs}px">${n}</div></div>`;
 }
 
 function render(){
@@ -966,18 +1129,9 @@ function render(){
       <div class="card start-screen">
         <div class="guess-eyebrow">Scouting Session</div>
         <div class="qtext" style="font-size:20px;">Think of a footballer. I'll try to work out who it is from ${PLAYERS.length} profiles.</div>
-        <p style="font-size:12px;letter-spacing:1px;text-transform:uppercase;font-family:'Courier New',monospace;">${playersSource}</p>
         <p>Answer honestly with Yes / No / Not sure. I'll narrow it down.</p>
         <button class="start-btn" onclick="resetGame()">Start Scouting</button>
         <button type="button" class="close-under" onclick="askClose(event)">Close</button>
-      </div>
-      <div class="settings">
-        <details>
-          <summary>Data source &amp; live sync</summary>
-          <div class="inner">
-            Playing with ${PLAYERS.length} profiles. Source: ${playersSource}.
-          </div>
-        </details>
       </div>
     `;
     return;
@@ -996,7 +1150,7 @@ function render(){
       </div>
       <div class="card">
         <div class="qnum">Question ${state.asked.length+1}</div>
-        <div class="qtext">${state.currentQ ? state.currentQ.text : "Hmm, narrowing down..."}</div>
+        <div class="qtext" dir="${uiLang === "ar" ? "rtl" : "ltr"}" lang="${uiLang}">${escHtml(qText(state.currentQ))}</div>
         <div class="answers">
           <button class="yes" onclick="answer(1)">Yes</button>
           <button class="no" onclick="answer(0)">No</button>
@@ -1022,7 +1176,7 @@ function render(){
     app.innerHTML = `
       <div class="card guess-card">
         <div class="guess-eyebrow">My guess is</div>
-        <div class="guess-name">${g.n}</div>
+        <div class="guess-name">${escHtml(g.n)}</div>
         <div class="guess-meta">
           <div>Position<b>${g.p}</b></div>
           <div>Nationality<b>${g.nat}</b></div>
@@ -1092,5 +1246,5 @@ setInterval(function(){
   });
 }, 8000);
 </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30b68f38e7092e1',t:'MTc4NzY2OTQzNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
