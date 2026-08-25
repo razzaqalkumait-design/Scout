@@ -618,31 +618,49 @@ const QUESTIONS = [
   {id:"young", text:"Is he currently under 25 years old?", ev:pl=>!!pl.young},
 ];
 
-/* -------------- LOAD LIVE-CACHED PLAYERS (players.json) -------------- */
+/* -------------- LOAD PLAYERS FROM SCOUT API -------------- */
 let playersSource = "built-in";
 
-async function loadPlayers(){
-  try{
-    const res = await fetch('./players.json', { cache: "no-store" });
-    if(!res.ok) throw new Error("no players.json found (" + res.status + ")");
-    const cache = await res.json();
-    const fetched = Object.values(cache.players || {});
-    if(fetched.length){
-      // merge: fetched players extend/override the built-in seed list by name
-      const byName = new Map(PLAYERS.map(p=>[p.n, p]));
-      for(const fp of fetched){
-        byName.set(fp.n, {
-          n: fp.n, p: fp.p, nat: fp.nat, clubs: fp.clubs,
-          cl: byName.get(fp.n)?.cl || 0, wc: byName.get(fp.n)?.wc || 0, bd: byName.get(fp.n)?.bd || 0,
-          retired: fp.retired, young: fp.young
-        });
-      }
-      PLAYERS = [...byName.values()];
-      playersSource = `cached API data (${fetched.length} synced, ${PLAYERS.length} total, last synced ${cache.lastRun ? new Date(cache.lastRun).toLocaleDateString() : "unknown"})`;
-    }
-  }catch(e){
-    playersSource = "built-in dataset only (players.json not found — that's expected if you're running this file standalone)";
+function scoutApiBase(){
+  if(typeof location === "undefined") return "";
+  if(location.protocol === "file:") return "";
+  return location.origin + "/api";
+}
+
+function mergeFetched(fetched){
+  const byName = new Map(PLAYERS.map(p=>[p.n, p]));
+  for(const fp of fetched){
+    const prev = byName.get(fp.n);
+    byName.set(fp.n, {
+      n: fp.n, p: fp.p, nat: fp.nat, clubs: fp.clubs || [],
+      cl: fp.cl || prev?.cl || 0,
+      wc: fp.wc || prev?.wc || 0,
+      bd: fp.bd || prev?.bd || 0,
+      retired: fp.retired, young: fp.young
+    });
   }
+  PLAYERS = [...byName.values()];
+}
+
+async function loadPlayers(){
+  const urls = [];
+  const api = scoutApiBase();
+  if(api) urls.push(api + "/players");
+  urls.push("./players.json");
+  for(const url of urls){
+    try{
+      const res = await fetch(url, { cache: "no-store" });
+      if(!res.ok) continue;
+      const cache = await res.json();
+      const fetched = Object.values(cache.players || {});
+      if(!fetched.length) continue;
+      mergeFetched(fetched);
+      const via = url.includes("/api/") ? "SCOUT API" : "local cache";
+      playersSource = `${via} (${fetched.length} synced, ${PLAYERS.length} total${cache.lastRun ? ", last synced " + new Date(cache.lastRun).toLocaleDateString() : ""})`;
+      return;
+    }catch(e){}
+  }
+  playersSource = "built-in dataset";
 }
 
 let state = {
@@ -857,8 +875,7 @@ function render(){
         <details>
           <summary>Data source &amp; live sync</summary>
           <div class="inner">
-            This build ships with a curated dataset of ${PLAYERS.length} players. Currently playing with: ${playersSource}.
-            <div style="margin-top:10px;">To grow the roster automatically, run <code>scripts/fetch-players.mjs</code> (see project README) — it caches fetched players into <code>players.json</code>, which this page loads automatically when deployed alongside it.</div>
+            Playing with ${PLAYERS.length} profiles. Source: ${playersSource}.
           </div>
         </details>
       </div>
@@ -968,5 +985,5 @@ if(bgmNode){
 render();
 loadPlayers().then(render);
 </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a30ae2001a4f92e3',t:'MTc4NzY2MzkwNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
