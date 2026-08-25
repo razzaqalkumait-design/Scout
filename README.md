@@ -13,30 +13,3 @@
   not included until then). When this file sits next to `scout.html` in your
   deployment, the game loads it automatically and merges it into the roster.
   Without it, the game just uses the built-in seed dataset — nothing breaks.
-
-## One-time setup
-1. Get a free API-Football key: https://www.api-football.com (100 req/day).
-2. In your GitHub repo: Settings → Secrets and variables → Actions →
-   New repository secret → name it `API_FOOTBALL_KEY`, paste your key.
-3. Push these files. The workflow runs automatically every night, or trigger
-   it manually anytime from the Actions tab ("Run workflow").
-
-## Running the fetch locally (optional)
-```
-API_FOOTBALL_KEY=your_key node scripts/fetch-players.mjs
-```
-This writes/updates `players.json` in the current directory.
-
-## Growing the roster
-Add teams to the `TARGET_TEAMS` list in `scripts/fetch-players.mjs`. Each new
-team costs ~1 request for its squad list, plus 1 request per *new* player for
-their transfer history — already-cached players are skipped for free. The
-free tier's 100/day easily covers adding a few teams per run.
-
-## Why not call the API straight from the browser?
-Two problems: most sports-data APIs (API-Football included) block direct
-cross-origin browser requests without a backend, and even where it works,
-every visitor's page load would burn your daily quota independently. Baking
-fetched data into a static, periodically-refreshed `players.json` sidesteps
-both — same approach as `questions.json` in Triviaty, just refreshed on a
-schedule instead of by hand.
