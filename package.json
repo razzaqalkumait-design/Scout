@@ -1,0 +1,9 @@
+{
+  "name": "scout",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node api/server.mjs",
+    "sync": "node scripts/fetch-players.mjs"
+  }
+}
